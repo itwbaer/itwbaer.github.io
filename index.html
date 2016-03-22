@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html ng-app="yahtzee">
+	<head>
+		<title>Yahtzee!</title>
+		<link rel="stylesheet" type="text/css" href="style.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.min.js"></script>
+		<script src="dice.js"></script>
+		<script src="scorecard.js"></script>
+		<script src="util.js"></script>
+		<script src="yahtzee.js"></script>
+		
+	</head>
+
+	<body ng-controller="GameController">
+		<p><a href="index.html">Restart Game</a></p>
+		<p><a href="highscores.php">See High Scores</a></p>
+		<center><h1 ng-class="{hidden: !gameOver}">Game Over! Final Score: {{card.grandTotal()}}</h1></center>
+		<!-- whatever current instructions are -->
+		<!-- display dice -->
+		<div id = "dice" class = "center">
+		<canvas id="dice1" ng-click="toggle(0)" height="100" width="100" ng-class="[{selected: die[0].locked}, {unselected: !die[0].locked}, {hidden: gameOver}]" ></canvas>
+		<canvas id="dice2" ng-click="toggle(1)" height="100" width="100" ng-class="[{selected: die[1].locked}, {unselected: !die[1].locked}, {hidden: gameOver}]"></canvas>
+		<canvas id="dice3" ng-click="toggle(2)" height="100" width="100" ng-class="[{selected: die[2].locked}, {unselected: !die[2].locked}, {hidden: gameOver}]"></canvas>
+		<canvas id="dice4" ng-click="toggle(3)" height="100" width="100" ng-class="[{selected: die[3].locked}, {unselected: !die[3].locked}, {hidden: gameOver}]"></canvas>
+		<canvas id="dice5" ng-click="toggle(4)" height="100" width="100" ng-class="[{selected: die[4].locked}, {unselected: !die[4].locked}, {hidden: gameOver}]"></canvas>
+		</div>
+		
+		<div id = "menu" ng-class="{hidden: gameOver}" class = "center"> 
+		<div ng-class="{hidden: rollsLeft == 0}"><button id = "rollButton" ng-click="roll()" >Roll</button></div>	
+		<p> Rolls Left This Turn: {{rollsLeft}} </p>
+		</div>
+		
+		<!-- scorecard -->
+		<div id = "scorecard" class = "center">
+			<table>
+				<tr>
+					<th colspan = "5"> Yahtzee </th>
+				</tr>
+				<tr id = "infoBar">
+					<td class = "infoBar"> Upper Section </td>
+					<td class = "infoBar"> How to Score</td>
+					<td class = "infoBar"> Select </td>
+					<td class = "infoBar"> Score This Roll </td>
+					<td class = "infoBar"> Kept Score </td>
+				</tr>
+				<tr>
+					<td> Aces </td>
+					<td> Count and Add Only Aces </td>
+					<td> <button ng-click = "keep('ones', matchNumberScore(1))" ng-class="{hidden: card.isKept('ones')}"> Score Aces </td>
+					<td id = "aceScoreRoll">{{matchNumberScore(1)}}</td>
+					<td id = "aceScoreField" ng-class="{scored: card.isKept('ones')}"> {{card.getScore("ones")}}</td>
+				</tr>
+				<tr>
+					<td> Twos </td>
+					<td> Count and Add Only Twos </td>
+					<td> <button ng-click = "keep('twos', matchNumberScore(2))" ng-class="{hidden: card.isKept('twos')}"> Score Twos </td>
+					<td id = "twoScoreRoll">  {{matchNumberScore(2)}}</td>
+					<td id = "twoScoreField" ng-class="{scored: card.isKept('twos')}"> {{card.getScore("twos")}}</td>
+				</tr>
+				<tr>
+					<td> Threes </td>
+					<td> Count and Add Only Threes </td>
+					<td> <button ng-click = "keep('threes', matchNumberScore(3))" ng-class="{hidden: card.isKept('threes')}"> Score Threes </td>
+					<td id = "threeScoreRoll"> {{matchNumberScore(3)}}</td>
+					<td id = "threeScoreField" ng-class="{scored: card.isKept('threes')}"> {{card.getScore("threes")}}</td>
+				</tr>
+				<tr>
+					<td> Fours </td>
+					<td> Count and Add Only Fours</td>
+					<td> <button ng-click = "keep('fours', matchNumberScore(4))" ng-class="{hidden: card.isKept('fours')}"> Score Fours </td>
+					<td id = "fourScoreRoll">  {{matchNumberScore(4)}}</td>
+					<td id = "fourScoreField" ng-class="{scored: card.isKept('fours')}"> {{card.getScore("fours")}}</td>
+				</tr>
+				<tr>
+					<td> Fives </td>
+					<td> Count and Add Only Fives </td>
+					<td> <button ng-click = "keep('fives', matchNumberScore(5))" ng-class="{hidden: card.isKept('fives')}"> Score Fives </td>
+					<td id = "fiveScoreRoll">  {{matchNumberScore(5)}}</td>
+					<td id = "fiveScoreField" ng-class="{scored: card.isKept('fives')}"> {{card.getScore("fives")}}</td>
+				</tr>
+				<tr>
+					<td> Sixes </td>
+					<td> Count and Add Only Sixes </td>
+					<td> <button ng-click = "keep('sixes', matchNumberScore(6))" ng-class="{hidden: card.isKept('sixes')}"> Score Sixes </td>
+					<td id = "sixScoreRoll"> {{matchNumberScore(6)}}</td>
+					<td id = "sixScoreField" ng-class="{scored: card.isKept('sixes')}"> {{card.getScore("sixes")}}</td>
+				</tr>
+				<tr>
+					<td class = "total"> Total Score </td>
+					<td> </td>
+					<td> </td>
+					<td> </td>
+					<td class = "total" id = "upperSectionTotal"> {{card.numsTotal()}} </td>
+				</tr>
+				<tr>
+					<td> Bonus</td>
+					<td> If Total Score is 63 or Over, Score 35</td>
+					<td> </td>
+					<td> </td>
+					<td id = "bonusField">{{card.bonus()}}</td>
+				</tr>
+				<tr>
+					<td class = "total"> Upper Section Total </td>
+					<td> </td>
+					<td> </td>
+					<td> </td>
+					<td class = "total" id = "upperSectionGrandTotal"> {{card.upperSection()}}</td>
+				</tr>
+				<tr>
+					<td colspan = "5" class = "infoBar"> Lower Section </td>
+				</tr>
+				<tr>
+					<td> 3 of a kind </td>
+					<td> Add Total Of All Dice </td>
+					<td> <button ng-click = "keep('threeOfAKind', ofAKind(3))" ng-class="{hidden: card.isKept('threeOfAKind')}"> Score 3 of a Kind </td>
+					<td id = "threeOfAKindScoreRoll">  {{ofAKind(3)}}</td>
+					<td id = "threeOfAKindScoreField" ng-class="{scored: card.isKept('threeOfAKind')}"> {{card.getScore("threeOfAKind")}}</td>
+				</tr>
+				<tr>
+					<td> 4 of a kind </td>
+					<td> Add Total Of All Dice </td>
+					<td> <button ng-click = "keep('fourOfAKind', ofAKind(4))" ng-class="{hidden: card.isKept('fourOfAKind')}"> Score 4 of a Kind </td>
+					<td id = "fourOfAKindScoreRoll">  {{ofAKind(4)}}</td>
+					<td id = "fourOfAKindScoreField" ng-class="{scored: card.isKept('fourOfAKind')}"> {{card.getScore("fourOfAKind")}}</td>
+				</tr>
+				<tr>
+					<td> Full House</td>
+					<td> Score 25 </td>
+					<td> <button ng-click = "keep('fullHouse', fullHouse())" ng-class="{hidden: card.isKept('fullHouse')}"> Score Full House </td>
+					<td id = "fullHouseScoreRoll">  {{fullHouse()}}</td>
+					<td id = "fullHouseScoreField" ng-class="{scored: card.isKept('fullHouse')}"> {{card.getScore("fullHouse")}}</td>
+				</tr>
+				<tr>
+					<td> Sm. Straight (Sequence of 4)</td>
+					<td> Score 30 </td>
+					<td> <button ng-click = "keep('smallStraight', smallStraight())" ng-class="{hidden: card.isKept('smallStraight')}"> Score Sm. Straight </td>
+					<td id = "smallStraightScoreRoll">  {{smallStraight()}} </td>
+					<td id = "smallStraightScoreField" ng-class="{scored: card.isKept('smallStraight')}"> {{card.getScore("smallStraight")}}</td>
+				</tr>
+				<tr>
+					<td> Lg. Straight (Sequence of 5)</td>
+					<td> Score 40 </td>
+					<td> <button ng-click = "keep('largeStraight', largeStraight())" ng-class="{hidden: card.isKept('largeStraight')}"> Score Lg. Straight </td>
+					<td id = "largeStraightScoreRoll">  {{largeStraight()}} </td>
+					<td id = "largeStraightScoreField" ng-class="{scored: card.isKept('largeStraight')}"> {{card.getScore("largeStraight")}}</td>
+				</tr>
+				<tr>
+					<td> YAHTZEE (5 of a kind)</td>
+					<td> Score 50 </td>
+					<td> <button ng-click = "keep('yahtzee', yahtzee())" ng-class="{hidden: card.isKept('yahtzee')}"> Score Yahtzee </td>
+					<td id = "yahtzeeScoreRoll">  {{yahtzee()}} </td>
+					<td id = "yahtzeeScoreField" ng-class="{scored: card.isKept('yahtzee')}"> {{card.getScore("yahtzee")}}</td>
+				</tr>
+				<tr>
+					<td> Chance </td>
+					<td> Score Total of All 5 Dice </td>
+					<td> <button ng-click = "keep('chance', chance())" ng-class="{hidden: card.isKept('chance')}"> Score Chance </td>
+					<td id = "chanceScoreRoll">  {{chance()}} </td>
+					<td id = "chanceScoreField" ng-class="{scored: card.isKept('chance')}"> {{card.getScore("chance")}}</td>
+				</tr>
+				<tr>
+					<td class = "total"> Total of Lower Section </td>
+					<td> </td>
+					<td> </td>
+					<td> </td>
+					<td class = "total" id = "lowerSectionTotal"> {{card.lowerSection()}} </td>
+				</tr>
+				<tr>
+					<td class = "grandTotal"> Grand Total </td>
+					<td> </td>
+					<td> </td>
+					<td> </td>
+					<th class = "grandTotal"> {{card.grandTotal()}} </th>
+				</tr>
+				<tr hidden>
+				</tr>
+			</table>
+			<p id = "error"> </div>
+		</div> 
+		
+	</body>
+</html>
