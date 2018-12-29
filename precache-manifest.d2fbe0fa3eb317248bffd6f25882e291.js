@@ -1,11 +1,11 @@
 self.__precacheManifest = [
   {
-    "revision": "ce5cb4071289f030a5b832bcc67acb7f",
-    "url": "/static/media/map_haunted_wasteland.ce5cb407.jpg"
+    "revision": "1ce940ec47090b50263ad30943f4cfee",
+    "url": "/static/media/map_gtg.1ce940ec.jpg"
   },
   {
-    "revision": "6c353b1e563ebf7a02af",
-    "url": "/static/css/main.b2934ca7.chunk.css"
+    "revision": "d44932dd4dac373e06e6",
+    "url": "/static/css/main.2c56a997.chunk.css"
   },
   {
     "revision": "f07e76545261e7c744ac78595cb3a4a8",
@@ -80,8 +80,12 @@ self.__precacheManifest = [
     "url": "/static/media/map_gerudo_fortress.c9c7d124.jpg"
   },
   {
+    "revision": "3476b1bbf4b4141c9a0b0943754f09df",
+    "url": "/static/media/map_gerudo_valley_adult.3476b1bb.jpg"
+  },
+  {
     "revision": "5cab14cd31f8158332016190d6c4a305",
-    "url": "/static/media/map_gerudo_valley.5cab14cd.jpg"
+    "url": "/static/media/map_gerudo_valley_child.5cab14cd.jpg"
   },
   {
     "revision": "303756c8a95b3c33a78f37695a2faea5",
@@ -92,12 +96,12 @@ self.__precacheManifest = [
     "url": "/static/media/map_graveyard.410967a3.jpg"
   },
   {
-    "revision": "1ce940ec47090b50263ad30943f4cfee",
-    "url": "/static/media/map_gtg.1ce940ec.jpg"
+    "revision": "d44932dd4dac373e06e6",
+    "url": "/static/js/main.d44932dd.chunk.js"
   },
   {
-    "revision": "6c353b1e563ebf7a02af",
-    "url": "/static/js/main.6c353b1e.chunk.js"
+    "revision": "ce5cb4071289f030a5b832bcc67acb7f",
+    "url": "/static/media/map_haunted_wasteland.ce5cb407.jpg"
   },
   {
     "revision": "07c4a5c1299e6664428c96a8f04f6292",
@@ -188,7 +192,7 @@ self.__precacheManifest = [
     "url": "/static/css/1.5abe9f65.chunk.css"
   },
   {
-    "revision": "bd5893cbd02e1ed381f98ab3bd183463",
+    "revision": "bf2d4412486461c3b50d296b64eb97a0",
     "url": "/index.html"
   }
 ];
